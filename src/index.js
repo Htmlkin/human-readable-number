@@ -9,6 +9,7 @@ const Text = {
     7: "seven",
     8: "eight",
     9: "nine",
+    10: "ten",
     11: "eleven",
     12: "twelve",
     13: "thirteen",
@@ -33,21 +34,28 @@ module.exports = function toReadable(number) {
     for (key in Text) {
         if (Math.floor(number / 100) == key) {
             if (Math.floor(number / 100)) {
-                result += Text[key] + " hundred";
-            } else result += Text[key];
+                result = Text[key] + " hundred";
+            } else result = Text[key];
         }
     }
     for (key in Text) {
-        if (Math.floor(number % 100) == key) {
+        if (Math.floor(number % 100) == key && Math.floor(number % 100) <= 20) {
             result += " " + Text[key];
-        } else if (Math.floor((number % 100) / 10) * 10 == key) {
+        } else if (
+            Math.floor((number % 100) / 10) * 10 == key &&
+            Math.floor(number % 100) >= 20
+        ) {
             result += " " + Text[key];
+
+            for (key in Text) {
+                if (Math.floor(number % 100) % 10 == key) {
+                    result += " " + Text[key];
+                }
+            }
         }
     }
-    for (key in Text) {
-        if (Math.floor(number % 100) % 10 == key) {
-            result += " " + Text[key];
-        }
+    if (number == 0) {
+        result = "zero";
     }
-    return result;
+    return result.trim();
 };
